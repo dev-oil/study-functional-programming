@@ -1,0 +1,63 @@
+const log = console.log;
+
+// # 일급 함수
+// - 함수가 값으로 다뤄질 수 있다.
+
+// # 고차 함수
+// - 함수를 값으로 다루는 함수
+
+// ## 함수를 인자로 받아서 실행하는 함수
+// - apply1
+// - times
+
+const apply1 = (f) => f(1);
+const add2 = (a) => a + 2;
+
+/**
+ * apply1(add2)
+ * apply1(a => a + 2)
+ * (a => a + 2)(1)
+ * 1 + 2
+ * 3
+ */
+
+log(apply1(add2));
+
+/**
+ * apply1(a => a - 1)
+ * (a => a - 1)(1)
+ * 1 - 1
+ * 0
+ */
+
+log(apply1((a) => a - 1));
+
+const times = (f, n) => {
+  let i = -1;
+  while (++i < n) f(i);
+};
+
+times(log, 3); // 0 1 2
+times((a) => log(a + 10), 3); // a 값에 0, 1, 2가 들어가서 10, 11, 12가 출력
+
+// ## 함수를 만들어 리턴하는 함수 (클로저를 만들어 리턴하는 함수)
+// - addMaker
+
+/**
+ * addMaker는 함수를 return하는 함수
+ * 클로저를 만들어 리턴하기 때문에 a의 값을 기억하고 있다.
+ * */
+
+const addMaker = (a) => (b) => a + b;
+const add10 = addMaker(10);
+
+/**
+ * add10(5)
+ * addMaker(10)(5)
+ * (a => b => a + b)(10)(5)
+ * (b => 10 + b)(5) => 위에서 사용된 a 값을 기억
+ * 10 + 5
+ */
+
+log(add10(5));
+log(add10(10));
