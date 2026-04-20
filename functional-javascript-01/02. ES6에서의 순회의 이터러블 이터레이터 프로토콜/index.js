@@ -116,3 +116,63 @@ console.log(it3); // 자기 자신을 return하도록 되어있어서, it2와 it
 
 // it === it2; // true
 // it2 === it3; // true
+
+console.clear(); // ===============================================
+
+// 사용자 정의 이터러블을 통해 알아보기
+// 조건 1. 이터러블은 [Symbol.iterator]() 메서드를 구현하고 있어야함 (가지고 있는 객체)
+// 조건 2. [Symbol.iterator]()는 이터레이터를 리턴해야 함
+// 조건 3. 리턴하는 이터레이터는 next() 메서드를 구현하고 있어야 함
+// 조건 4. next() 메서드는 { value, done } 객체를 리턴해야함
+// 조건 5. done이 true가 될 때까지 (i > 0) value--를 리턴해야함
+
+const iterable = {
+  [Symbol.iterator]() {
+    let i = 3;
+    return {
+      next() {
+        return i === 0 ? { done: true } : { value: i--, done: false };
+      },
+      [Symbol.iterator]() {
+        return this;
+      }, // 자기 자신을 return 하도록 해서, well-formed 이터레이터가 되도록 함 (이터레이터도 이터러블이 될 수 있도록) => for of 문으로 순회할 수 있도록
+    };
+  },
+};
+
+const myIterator = iterable[Symbol.iterator]();
+
+// console.log(myIterator.next()); // { value: 3, done: false }
+// console.log(myIterator.next()); // { value: 2, done: false }
+// console.log(myIterator.next()); // { value: 1, done: false }
+// console.log(myIterator.next()); // { done: true }
+
+// for (const a of iterable) console.log(a);
+for (const i of myIterator) console.log(i); // [Symbol.iterator]() 메서드가 잘 구현된 이터러블이므로, 이터레이터를 만들어서 순회할 수 있음
+
+const arr2 = [1, 2, 3];
+const iter4 = arr2[Symbol.iterator]();
+
+iter4.next();
+
+for (const a of iter4) console.log(a);
+
+// 잘 구현된 이터러블은, 이터레이터를 만들었을 때. 이 이터레이터를 진행하다가 순회할 수도 있고, 이터레이터를 그대로 for of 문으로 넣었을 때 모든 값으로 순회할 수 있도록 되어있음.
+
+console.log(iter4[Symbol.iterator]() === iter4); // iter4 역시 Symbol.iterator를 가지고 있고, 그것을 실행한 값은, 자기 자신이다.
+
+// 이렇게 이터레이터가 자기 자신을 반환하는 Symbol.iterator 메서드를 가지고 있을 때 well-formed 이터레이터라고 부를 수 있음
+
+console.clear(); // ===============================================
+
+// 여러가지 이터러블/이터레이터 프로토콜 예시
+// (e.g. DOM API, NodeList, arguments, String 등)
+for (const a of document.querySelectorAll('*')) console.log(a); // <html>, <head>, <meta charset="UTF-8">, <title>Document</title>, <body>...</body>  이런식으로 모든 요소를 순회할 수 있음
+
+const all = document.querySelectorAll('*');
+console.log(all[Symbol.iterator]()); // [Object: NodeList] { ... } NodeList도 이터러블이므로 Symbol.iterator를 통해 이터레이터 객체를 리턴할 수 있음
+
+const documentIterator = all[Symbol.iterator]();
+console.log(documentIterator.next()); // { value: <html>, done: false } NodeList의 이터레이터 객체를 통해 순회할 수 있음
+
+// NodeList(이터러블이므로 for of로 순회할 수 있음)
