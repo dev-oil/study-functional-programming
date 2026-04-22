@@ -167,12 +167,24 @@ console.clear(); // ===============================================
 
 // 여러가지 이터러블/이터레이터 프로토콜 예시
 // (e.g. DOM API, NodeList, arguments, String 등)
-for (const a of document.querySelectorAll('*')) console.log(a); // <html>, <head>, <meta charset="UTF-8">, <title>Document</title>, <body>...</body>  이런식으로 모든 요소를 순회할 수 있음
+// for (const a of document.querySelectorAll('*')) console.log(a); // <html>, <head>, <meta charset="UTF-8">, <title>Document</title>, <body>...</body>  이런식으로 모든 요소를 순회할 수 있음
 
-const all = document.querySelectorAll('*');
-console.log(all[Symbol.iterator]()); // [Object: NodeList] { ... } NodeList도 이터러블이므로 Symbol.iterator를 통해 이터레이터 객체를 리턴할 수 있음
+// const all = document.querySelectorAll('*');
+// console.log(all[Symbol.iterator]()); // [Object: NodeList] { ... } NodeList도 이터러블이므로 Symbol.iterator를 통해 이터레이터 객체를 리턴할 수 있음
 
-const documentIterator = all[Symbol.iterator]();
-console.log(documentIterator.next()); // { value: <html>, done: false } NodeList의 이터레이터 객체를 통해 순회할 수 있음
+// const documentIterator = all[Symbol.iterator]();
+// console.log(documentIterator.next()); // { value: <html>, done: false } NodeList의 이터레이터 객체를 통해 순회할 수 있음
 
 // NodeList(이터러블이므로 for of로 순회할 수 있음)
+
+console.clear(); // ===============================================
+
+// 전개 연산자
+// 전개 연산자도 마찬가지로 이터러블, 이터레이터 프로토콜을 따른다.
+const a = [1, 2];
+
+// 만약 Symbol.iterator를 null로 변경하면, 전개 연산자 시도 시, TypeError: a is not iterable 오류가 발생함
+// a[Symbol.iterator] = null;
+
+console.log([...a, ...[3, 4]]); // [ 1, 2, 3, 4 ] 전개 연산자를 통해 이터러블을 펼칠 수 있음
+console.log([...a, ...arr, ...set, ...map.keys()]); // [ 1, 2, 1, 2, 3, 1, 2, 3 ] 이터러블을 펼칠 수 있음
