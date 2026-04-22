@@ -89,3 +89,26 @@ for (const a of odds(10)) console.log(a); // 1 3 5 7 9
 //
 // => "필요한 만큼만, 필요할 때만 계산해서 흘려보낸다"
 //    이후 map/filter/reduce 를 직접 구현할 때 이 지연 평가가 핵심이 됨
+
+console.clear(); // ===============================================
+
+// for...of, 전개 연산자, 구조 분해, 나머지 연산자
+// 조합 예시
+// 이렇게 잘 사용하면 조합성이 높은 프로그래밍을 할 수 있음
+
+console.log(...odds(10)); // 1 3 5 7 9
+console.log([...odds(10), ...odds(20)]); // [ 1, 3, 5, 7, 9, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 ]
+
+const [head, ...tail] = odds(10);
+
+console.log(head); // 1
+console.log(tail); // [ 3, 5, 7, 9 ]
+
+const [a, b, ...rest] = odds(10);
+console.log(a); // 1
+console.log(b); // 3
+console.log(rest); // [ 5, 7, 9 ]
+
+const { value, done } = odds(10).next();
+console.log(value); // 1
+console.log(done); // false
