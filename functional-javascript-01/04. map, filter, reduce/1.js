@@ -60,3 +60,45 @@ m.set('b', 20);
 
 const result = map(([key, value]) => [key, value * 2], m);
 console.log(result); // [ [ 'a', 20 ], [ 'b', 40 ] ]
+
+console.clear(); // ======================================================
+
+// filter
+const filter = (f, iter) => {
+  let res = [];
+  for (const p of iter) {
+    if (f(p)) res.push(p); // 어떤 조건을 받을것이냐. 보조함수에게 위임
+  }
+  return res;
+};
+
+let under20000 = [];
+
+for (const p of products) {
+  if (p.price < 20000) under20000.push(p);
+}
+
+console.log(...under20000);
+console.log(...filter((p) => p.price < 20000, products));
+
+let over20000 = [];
+
+for (const p of products) {
+  if (p.price > 20000) over20000.push(p);
+}
+
+console.log(...over20000);
+console.log(...filter((p) => p.price > 20000, products));
+
+console.log(filter((n) => n % 2, [1, 2, 3, 4])); // [1, 3]
+console.log(
+  filter(
+    (n) => n % 2,
+    (function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+      yield 4;
+    })(), // 즉시 호출해서 이터러블을 넘겨야 함
+  ),
+); // [1, 3]
