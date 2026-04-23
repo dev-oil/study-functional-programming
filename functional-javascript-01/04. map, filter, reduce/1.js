@@ -43,3 +43,20 @@ function* gen() {
 }
 
 console.log(map((el) => el * 2, gen())); // 2 4 6
+
+console.clear(); // ======================================================
+
+// Key value 쌍을 나타내는 Map
+let m = new Map();
+
+m.set('a', 10);
+m.set('b', 20);
+
+// const it = m[Symbol.iterator]();
+
+// console.log(it.next()); // { value: [ 'a', 10 ], done: false }
+// console.log(it.next()); // { value: [ 'b', 20 ], done: false }
+// console.log(it.next()); // { value: undefined, done: true }
+
+const result = map(([key, value]) => [key, value * 2], m);
+console.log(result); // [ [ 'a', 20 ], [ 'b', 40 ] ]
