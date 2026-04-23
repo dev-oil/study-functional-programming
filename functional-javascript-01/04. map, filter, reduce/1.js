@@ -22,8 +22,24 @@ const map = (f, iter) => {
 
 // 보조함수(콜백)를 바꾸는 것만으로 수집하는 값을 자유롭게 결정할 수 있다.
 // map 자체는 손대지 않고, 보조함수만 교체 → 높은 재사용성
-const names = map((p) => p.name, products);   // 이름 수집
+const names = map((p) => p.name, products); // 이름 수집
 const prices = map((p) => p.price, products); // 가격 수집
 
 console.log(names);
 console.log(prices);
+
+console.clear(); // ======================================================
+
+// 이터러블 프로토콜을 따른 map의 다형성
+// e.g.
+// console.log(map((el) => el.nodeName, document.querySelectorAll('*')));
+
+// 이렇게 만든 map 함수는 이터러블 프로토콜을 따른 다형성을 가지고 있어서, 다양한 이터러블에 대해 재사용할 수 있습니다.
+
+function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+console.log(map((el) => el * 2, gen())); // 2 4 6
